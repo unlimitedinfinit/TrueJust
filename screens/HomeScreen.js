@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',  // Align button text to the left
   },
   signOutButton: {
-    marginTop: 30,
+    marginTop: 10,
     color: "#f44336",  
   },
 });
