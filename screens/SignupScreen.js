@@ -35,7 +35,7 @@ export const SignupScreen = ({ navigation }) => {
         {/* LogoContainer: consist app logo and screen title */}
         <View style={styles.logoContainer}>
           <Logo uri={Images.logo} />
-          <Text style={styles.screenTitle}>Create a new account!</Text>
+          <Text style={styles.screenTitle}>Create a new TrueJust account!</Text>
         </View>
         {/* Formik Wrapper */}
         <Formik

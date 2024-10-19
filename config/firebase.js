@@ -1,16 +1,16 @@
 import { initializeApp } from "firebase/app";
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
-import Constants from "expo-constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// add firebase config
+// add firebase config with the actual values from google-services.json
 const firebaseConfig = {
-  apiKey: Constants.expoConfig?.extra?.apiKey,
-  authDomain: Constants.expoConfig?.extra?.authDomain,
-  projectId: Constants.expoConfig?.extra?.projectId,
-  storageBucket: Constants.expoConfig?.extra?.storageBucket,
-  messagingSenderId: Constants.expoConfig?.extra?.messagingSenderId,
-  appId: Constants.expoConfig?.extra?.appId,
+  apiKey: "AIzaSyDl97QQAYqYPzZbMzO2rGCKQKdHJOZJRl8",  // Your API key
+  authDomain: "truevote-86420.firebaseapp.com",       // Firebase auth domain
+  projectId: "truevote-86420",                        // Firebase project ID
+  storageBucket: "truevote-86420.appspot.com",        // Firebase storage bucket
+  messagingSenderId: "840578627229",                  // Messaging sender ID
+  appId: "1:840578627229:android:a99084fda01b94bd7ac674", // App ID from google-services.json
+  databaseURL: "https://truevote-86420-default-rtdb.firebaseio.com" // Firebase Realtime Database URL (if needed)
 };
 
 // initialize firebase
