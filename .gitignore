@@ -43,3 +43,9 @@ Temporary Items
 .expo
 .expo-shared
 .vscode
+
+# Ignore google services file
+google-services.json
+
+# Ignore environment variables file
+.env
