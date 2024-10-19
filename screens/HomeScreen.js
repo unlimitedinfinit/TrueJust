@@ -43,7 +43,9 @@ export const HomeScreen = () => {
           delay={150} 
           style={styles.welcomeText}
         >
-          Welcome to Just Liberty Inc: Just Politics
+          Brought to you by:
+          {"\n"} Just Liberty Incorporated
+          {"\n"} A Non-Profit Charity Organization. 
         </Animatable.Text>
 
         <Animatable.Text 
@@ -51,8 +53,10 @@ export const HomeScreen = () => {
           delay={500} 
           style={styles.userText}
         >
-          {user?.email ? user.email : "Guest"} {"\n\n"}
+         {"\n"}Hello {user?.email ? user.email : "Guest"} welcome!{"\n\n"}
           Start by defining your political values, explore candidate options, and track their progress.
+          {"\n"} {"\n"}After submiting your values click {"\n"}'View Results' to get a breakdown
+          of the {"\n"} Pro's and Con's for each vote.
         </Animatable.Text>
 
         {/* Navigation Buttons */}
@@ -125,10 +129,10 @@ const styles = StyleSheet.create({
     height: "100%",  
   },
   welcomeText: {
-    fontSize: 30,
+    fontSize: 22,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 40,
+    marginBottom: 1,
     color: "#fff",  
     textShadowColor: 'rgba(0, 0, 0, 0.75)',  
     textShadowOffset: { width: -1, height: 1 },
@@ -137,7 +141,7 @@ const styles = StyleSheet.create({
   userText: {
     fontSize: 20,
     textAlign: "center",
-    marginBottom: 150,
+    marginBottom: 10,
     color: "#fff",  
     textShadowColor: 'rgba(0, 0, 0, 0.75)',  
     textShadowOffset: { width: -1, height: 1 },
@@ -150,9 +154,9 @@ const styles = StyleSheet.create({
   },
   button: {
     marginVertical: 10,
-    width: 200,  // Set a fixed width for buttons
+    width: 150,  // Set a fixed width for buttons
     backgroundColor: "#6200ea",
-    padding: 10,
+    padding: 3,
     justifyContent: 'flex-start',  // Align text to the left
   },
   
