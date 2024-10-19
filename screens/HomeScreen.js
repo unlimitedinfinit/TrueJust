@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, ImageBackground } from "react-native";
 import { Button, Text } from "react-native-paper";  
 import * as Animatable from 'react-native-animatable';  
 import LottieView from 'lottie-react-native';  
@@ -9,7 +9,11 @@ import { signOut } from "firebase/auth";
 import { auth } from "../config";
 import { AuthenticatedUserContext } from "../providers/AuthenticatedUserProvider";
 
+// Get screen width for styling
 const { width } = Dimensions.get("window");  
+
+// Import the background image from assets
+const backgroundImage = require('../assets/america2.jpg');  // Replace with your file name
 
 export const HomeScreen = () => {
   const { user, setUser } = useContext(AuthenticatedUserContext);
@@ -22,90 +26,98 @@ export const HomeScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Lottie Animation */}
-      <LottieView
-        source={require('../assets/working.json')}  
-        autoPlay
-        loop
-        style={styles.animation}
-      />
+    // Use ImageBackground to add a background image
+    <ImageBackground source={backgroundImage} style={styles.background} resizeMode="stretch">
+      <View style={styles.container}>
+        {/* Lottie Animation */}
+        <LottieView
+          source={require('../assets/working.json')}  
+          autoPlay
+          loop
+          style={styles.animation}
+        />
 
-      {/* Animated Welcome Message */}
-      <Animatable.Text 
-        animation="fadeInDown" 
-        delay={200} 
-        style={styles.welcomeText}
-      >
-        Welcome to Just Liberty Inc: Just Politics
-      </Animatable.Text>
-
-      <Animatable.Text 
-        animation="fadeInUp" 
-        delay={500} 
-        style={styles.userText}
-      >
-        {user?.email ? user.email : "Guest"} {"\n\n"}
-        Get Started today by filling in your political values, learning about your options, and tracking candidates!
-      </Animatable.Text>
-
-      {/* Navigation Buttons */}
-      <Animatable.View animation="fadeInUp" delay={700} style={styles.buttonContainer}>
-        <Button 
-          mode="contained" 
-          icon="book" 
-          onPress={() => navigation.navigate("MyValues")} 
-          style={styles.button}
+        {/* Animated Welcome Message */}
+        <Animatable.Text 
+          animation="fadeInDown" 
+          delay={150} 
+          style={styles.welcomeText}
         >
-          My Values
-        </Button>
+          Welcome to Just Liberty Inc: Just Politics
+        </Animatable.Text>
 
-        <Button 
-          mode="contained" 
-          icon="account-group"  
-          onPress={() => navigation.navigate("Candidate")} 
-          style={styles.button}
+        <Animatable.Text 
+          animation="fadeInUp" 
+          delay={500} 
+          style={styles.userText}
         >
-          Candidates
-        </Button>
+          {user?.email ? user.email : "Guest"} {"\n\n"}
+          Start by defining your political values, explore candidate options, and track their progress.
+        </Animatable.Text>
 
+        {/* Navigation Buttons */}
+        <Animatable.View animation="fadeInUp" delay={700} style={styles.buttonContainer}>
+          <Button 
+            mode="contained" 
+            icon="book" 
+            onPress={() => navigation.navigate("MyValues")} 
+            style={styles.button}
+          >
+            My Values
+          </Button>
+
+          <Button 
+            mode="contained" 
+            icon="account-group"  
+            onPress={() => navigation.navigate("Candidate")} 
+            style={styles.button}
+          >
+            Candidates
+          </Button>
+
+          <Button 
+            mode="contained" 
+            icon="file-chart"  
+            onPress={() => navigation.navigate("Tracking")} 
+            style={styles.button}
+          >
+            Tracking $
+          </Button>
+
+          <Button 
+            mode="contained" 
+            icon="chart-bar"  
+            onPress={() => navigation.navigate("Summary")} 
+            style={styles.button}
+          >
+            View Results
+          </Button>
+        </Animatable.View>
+
+        {/* Sign Out Button */}
         <Button 
-          mode="contained" 
-          icon="file-chart"  
-          onPress={() => navigation.navigate("Tracking")} 
-          style={styles.button}
+          mode="text" 
+          onPress={handleLogout} 
+          style={styles.signOutButton}
         >
-          Tracking
+          Sign Out
         </Button>
-
-        <Button 
-          mode="contained" 
-          icon="chart-bar"  
-          onPress={() => navigation.navigate("Summary")} 
-          style={styles.button}
-        >
-          Summary
-        </Button>
-      </Animatable.View>
-
-      {/* Sign Out Button */}
-      <Button 
-        mode="text" 
-        onPress={handleLogout} 
-        style={styles.signOutButton}
-      >
-        Sign Out
-      </Button>
-    </View>
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f5f5f5",  
+    backgroundColor: "rgba(0, 0, 0, 0.5)",  // Optional dark overlay
   },
   animation: {
     position: "absolute",
@@ -113,10 +125,10 @@ const styles = StyleSheet.create({
     height: "100%",  
   },
   welcomeText: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 40,
     color: "#fff",  
     textShadowColor: 'rgba(0, 0, 0, 0.75)',  
     textShadowOffset: { width: -1, height: 1 },
@@ -125,26 +137,28 @@ const styles = StyleSheet.create({
   userText: {
     fontSize: 20,
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 150,
     color: "#fff",  
     textShadowColor: 'rgba(0, 0, 0, 0.75)',  
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
   },
   buttonContainer: {
-    width: "100%",
+    width: "100%",   // Ensure the container takes up full width
     alignItems: "flex-start",  // Align buttons to the left
-    paddingHorizontal: 20,  // Add padding to the left
+    paddingHorizontal: 20,  // Left padding for spacing
   },
   button: {
     marginVertical: 10,
-    width: "40%",  // Reduce button width to 60% of the screen
-    backgroundColor: "#6200ea",  
+    width: 200,  // Set a fixed width for buttons
+    backgroundColor: "#6200ea",
     padding: 10,
-    justifyContent: 'flex-start',  // Align button text to the left
+    justifyContent: 'flex-start',  // Align text to the left
   },
+  
+  
   signOutButton: {
-    marginTop: 10,
+    marginTop: 30,
     color: "#f44336",  
   },
 });
