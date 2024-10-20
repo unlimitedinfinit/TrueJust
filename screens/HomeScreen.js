@@ -1,168 +1,197 @@
-import React, { useContext } from "react";
-import { View, StyleSheet, Dimensions, ImageBackground } from "react-native";
-import { Button, Text } from "react-native-paper";  
+import React, { useContext, useState } from "react";
+import { View, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from "react-native";
+import { Text, Checkbox } from "react-native-paper";  
 import * as Animatable from 'react-native-animatable';  
 import LottieView from 'lottie-react-native';  
 import { useNavigation } from "@react-navigation/native";  
 
-import { signOut } from "firebase/auth";
-import { auth } from "../config";
 import { AuthenticatedUserContext } from "../providers/AuthenticatedUserProvider";
 
-// Get screen width for styling
 const { width } = Dimensions.get("window");  
 
-// Import the background image from assets
-const backgroundImage = require('../assets/america2.jpg');  // Replace with your file name
-
 export const HomeScreen = () => {
-  const { user, setUser } = useContext(AuthenticatedUserContext);
+  const { user } = useContext(AuthenticatedUserContext);
   const navigation = useNavigation();
 
-  const handleLogout = () => {
-    signOut(auth)
-      .then(() => setUser(null))
-      .catch((error) => console.log("Error logging out: ", error));
-  };
+  // Checkbox states for each section
+  const [valuesChecked, setValuesChecked] = useState(false);
+  const [candidatesChecked, setCandidatesChecked] = useState(false);
+  const [trackingChecked, setTrackingChecked] = useState(false);
+  const [resultsChecked, setResultsChecked] = useState(false);
 
   return (
-    // Use ImageBackground to add a background image
-    <ImageBackground source={backgroundImage} style={styles.background} resizeMode="stretch">
-      <View style={styles.container}>
-        {/* Lottie Animation */}
-        <LottieView
-          source={require('../assets/working.json')}  
-          autoPlay
-          loop
-          style={styles.animation}
-        />
+    <View style={styles.container}>
+      {/* Updated Welcome Text */}
+      <Animatable.Text 
+        animation="fadeInDown" 
+        delay={150} 
+        style={styles.welcomeText}
+      >
+        Welcome {user?.email ? user.email : "Guest"} to Just Politics!
+      </Animatable.Text>
 
-        {/* Animated Welcome Message */}
-        <Animatable.Text 
-          animation="fadeInDown" 
-          delay={150} 
-          style={styles.welcomeText}
+      {/* Instructions */}
+      <Animatable.View animation="fadeInUp" delay={300} style={styles.instructionsContainer}>
+        <Text style={styles.instructions}>
+          Start by setting your political values, exploring candidates, and viewing the results that match your preferences.
+        </Text>
+      </Animatable.View>
+
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+        {/* My Values Section */}
+        <TouchableOpacity 
+          style={styles.lottieContainer} 
+          onPress={() => {
+            navigation.navigate("MyValues");
+            setValuesChecked(true);
+          }}
         >
-          Brought to you by:
-          {"\n"} Just Liberty Incorporated
-          {"\n"} A Non-Profit Charity Organization. 
-        </Animatable.Text>
+          <LottieView
+            source={require('../assets/thinkingValues.json')}  
+            autoPlay
+            loop
+            style={styles.lottie}
+          />
+          <Text style={styles.lottieText}>Set Political Values</Text>
+          <Checkbox 
+            status={valuesChecked ? "checked" : "unchecked"} 
+            onPress={() => setValuesChecked(!valuesChecked)}
+            uncheckedColor="#6200ea"  // Set the border color of unchecked checkbox
+            color="#6200ea"           // Set the color of checked checkbox
+            style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] }} // Increase size
+          /> 
+        </TouchableOpacity>
 
-        <Animatable.Text 
-          animation="fadeInUp" 
-          delay={500} 
-          style={styles.userText}
+        {/* Candidates Section */}
+        <TouchableOpacity 
+          style={styles.lottieContainer} 
+          onPress={() => {
+            navigation.navigate("Candidate");
+            setCandidatesChecked(true);
+          }}
         >
-         {"\n"}Hello {user?.email ? user.email : "Guest"} welcome!{"\n\n"}
-          Start by defining your political values, explore candidate options, and track their progress.
-          {"\n"} {"\n"}After submiting your values click {"\n"}'View Results' to get a breakdown
-          of the {"\n"} Pro's and Con's for each vote.
-        </Animatable.Text>
+          <LottieView
+            source={require('../assets/candidate.json')}  
+            autoPlay
+            loop
+            style={styles.lottie}
+          />
+          <Text style={styles.lottieText}>Review Candidates</Text>
+          <Checkbox 
+            status={candidatesChecked ? "checked" : "unchecked"} 
+            onPress={() => setCandidatesChecked(!candidatesChecked)} 
+            uncheckedColor="#6200ea"  
+            color="#6200ea"           
+          />
+        </TouchableOpacity>
 
-        {/* Navigation Buttons */}
-        <Animatable.View animation="fadeInUp" delay={700} style={styles.buttonContainer}>
-          <Button 
-            mode="contained" 
-            icon="book" 
-            onPress={() => navigation.navigate("MyValues")} 
-            style={styles.button}
-          >
-            My Values
-          </Button>
-
-          <Button 
-            mode="contained" 
-            icon="account-group"  
-            onPress={() => navigation.navigate("Candidate")} 
-            style={styles.button}
-          >
-            Candidates
-          </Button>
-
-          <Button 
-            mode="contained" 
-            icon="file-chart"  
-            onPress={() => navigation.navigate("Tracking")} 
-            style={styles.button}
-          >
-            Tracking $
-          </Button>
-
-          <Button 
-            mode="contained" 
-            icon="chart-bar"  
-            onPress={() => navigation.navigate("Summary")} 
-            style={styles.button}
-          >
-            View Results
-          </Button>
-        </Animatable.View>
-
-        {/* Sign Out Button */}
-        <Button 
-          mode="text" 
-          onPress={handleLogout} 
-          style={styles.signOutButton}
+        {/* Tracking (Oversight) Section */}
+        <TouchableOpacity 
+          style={styles.lottieContainer} 
+          onPress={() => {
+            navigation.navigate("Tracking");
+            setTrackingChecked(true);
+          }}
         >
-          Sign Out
-        </Button>
-      </View>
-    </ImageBackground>
+          <LottieView
+            source={require('../assets/magnify.json')}  
+            autoPlay
+            loop
+            style={styles.lottie}
+          />
+          <Text style={styles.lottieText}>Oversight and Accountability</Text>
+          <Checkbox 
+            status={trackingChecked ? "checked" : "unchecked"} 
+            onPress={() => setTrackingChecked(!trackingChecked)} 
+            uncheckedColor="#6200ea"  
+            color="#6200ea"           
+          />
+        </TouchableOpacity>
+
+        {/* View Results Section */}
+        <TouchableOpacity 
+          style={styles.lottieContainer} 
+          onPress={() => {
+            navigation.navigate("Summary");
+            setResultsChecked(true);
+          }}
+        >
+          <LottieView
+            source={require('../assets/vote.json')}  
+            autoPlay
+            loop
+            style={styles.lottie}
+          />
+          <Text style={styles.lottieText}>View Results</Text>
+          <Checkbox 
+            status={resultsChecked ? "checked" : "unchecked"} 
+            onPress={() => setResultsChecked(!resultsChecked)} 
+            uncheckedColor="#6200ea"  
+            color="#6200ea"           
+          />
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",  // Optional dark overlay
-  },
-  animation: {
-    position: "absolute",
-    width: width,  
-    height: "100%",  
+    backgroundColor: "#f0f0f0",
+    paddingTop: 50,
   },
   welcomeText: {
-    fontSize: 22,
+    fontSize: 15,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 1,
-    color: "#fff",  
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',  
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
+    color: "#333",
+    marginBottom: 20,
+    marginTop: 10,
   },
-  userText: {
-    fontSize: 20,
+  instructionsContainer: {
+    width: width * 0.8,
+    backgroundColor: "#fff",
+    padding: 4,
+    borderRadius: 5,
+    marginBottom: 1,
+    elevation: 4,
+  },
+  instructions: {
+    fontSize: 10,
+    color: "#555",
+    lineHeight: 20,
+    textAlign: "center",
+  },
+  scrollContainer: {
+    alignItems: "center",
+    paddingVertical: 20,
+  },
+  lottieContainer: {
+    width: width * 0.75,
+    alignItems: "center",
+    marginVertical: 20,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 20,
+    elevation: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  lottie: {
+    width: 150,
+    height: 150,
+    marginBottom: 10,
+  },
+  lottieText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
     textAlign: "center",
     marginBottom: 10,
-    color: "#fff",  
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',  
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
-  },
-  buttonContainer: {
-    width: "100%",   // Ensure the container takes up full width
-    alignItems: "flex-start",  // Align buttons to the left
-    paddingHorizontal: 20,  // Left padding for spacing
-  },
-  button: {
-    marginVertical: 10,
-    width: 150,  // Set a fixed width for buttons
-    backgroundColor: "#6200ea",
-    padding: 3,
-    justifyContent: 'flex-start',  // Align text to the left
-  },
-  
-  
-  signOutButton: {
-    marginTop: 30,
-    color: "#f44336",  
   },
 });
