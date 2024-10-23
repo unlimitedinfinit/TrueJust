@@ -43,9 +43,15 @@ Temporary Items
 .expo
 .expo-shared
 .vscode
+config/
+/config/
+
+.config
+config/firebase.js
 
 # Ignore google services file
 google-services.json
+firebase.js
 
 # Ignore environment variables file
 .env
@@ -53,3 +59,4 @@ google-services.json
 # Ignore Firebase config files
 backend/config/google-services.json
 frontend/google-services.json
+
